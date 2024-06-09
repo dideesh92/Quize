@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Application</title>
+</head>
+<body>
+  <div id="quiz-container">
+    <h2 id="question"></h2>
+    <form id="quiz-form">
+      <div id="options"></div>
+      <button type="submit">Next</button>
+    </form>
+    <p id="feedback"></p>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "The five elements of blockchain are distribution, encryption, immutability, tokenization and:"
+        options: ["Transparency", "Authorization", "Efficiency", "Decentralization"],
+
+        answer: "Decentralization"
+      },
+      {
+        question: "what is the national flower of india'?",
+        options: ["hibiscus", "jasmin", "lotus", "rose"],
+        answer: "lotus"
+      },
+      {
+        question:
+        options:
+        answer: 
+      }
+      
+    ];
+
+    const quizContainer = document.getElementById('quiz-container');
+    const questionElement = document.getElementById('question');
+    const optionsElement = document.getElementById('options');
+    const feedbackElement = document.getElementById('feedback');
+    const quizForm = document.getElementById('quiz-form');
+
+    let currentQuestion = 0;
+    let score = 0;
+    let timer;
+
+    function displayQuestion() {
+      const currentQuizData = quizData[currentQuestion];
+      questionElement.textContent = currentQuizData.question;
+      optionsElement.innerHTML = "";
+      currentQuizData.options.forEach((option, index) => {
+        const optionElement = document.createElement('input');
+        optionElement.type = 'radio';
+        optionElement.name = 'option';
+        optionElement.value = option;
+        optionElement.id = `option${index}`;
+        const labelElement = document.createElement('label');
+        labelElement.htmlFor = `option${index}`;
+        labelElement.textContent = option;
+        optionsElement.appendChild(optionElement);
+        optionsElement.appendChild(labelElement);
+      });
+    }
+
+    function checkAnswer() {
+      const selectedOption = document.querySelector('input[name="option"]:checked');
+      if (selectedOption) {
+        const userAnswer = selectedOption.value;
+        const correctAnswer = quizData[currentQuestion].answer;
+        if (userAnswer === correctAnswer) {
+          score++;
+          feedbackElement.textContent = "Correct!";
+        } else {
+          feedbackElement.textContent = "Incorrect!";
+        }
+      } else {
+        feedbackElement.textContent = "Please select an option.";
+      }
+    }
+
+    function showFeedback() {
+      feedbackElement.style.display = 'block';
+      setTimeout(() => {
+        feedbackElement.style.display = 'none';
+      }, 1500);
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < quizData.length) {
+        displayQuestion();
+      } else {
+        endQuiz();
+      }
+    }
+
+    function endQuiz() {
+      clearInterval(timer);
+      quizContainer.innerHTML = `
+        <h2>Quiz Complete!</h2>
+        <p>Your Score: ${score} out of ${quizData.length}</p>
+      `;
+    }
+
+    function startTimer() {
+      let timeLeft = 10; // Change this value for timer duration
+      timer = setInterval(() => {
+        timeLeft--;
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          nextQuestion();
+        }
+      }, 1000);
+    }
+
+    quizForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      checkAnswer();
+      showFeedback();
+      startTimer();
+    });
+
+    displayQuestion();
+    startTimer();
+  </script>
+</body>
+</html>

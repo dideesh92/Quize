@@ -1,0 +1,19 @@
+#options input[type="radio"] {
+    display: none;
+}
+
+#options label {
+    display: block;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+#feedback {
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: green;
+}
+
+#result {
+    margin-top: 20px;
+}
